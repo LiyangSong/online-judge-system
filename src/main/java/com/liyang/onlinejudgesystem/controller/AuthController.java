@@ -27,7 +27,7 @@ public class AuthController {
 
     // Create a new user, hash password and save to database
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody RegisterDto registerDto) {
+    public ResponseEntity<String> register(@RequestBody RegisterDto registerDto) {
         String encryptedPassword = passwordEncoder.encode(registerDto.userPassword());
         jwtUserDetailsService.register(registerDto, encryptedPassword);
         return ResponseEntity.status(HttpStatus.CREATED).body("User registered successfully");

@@ -41,7 +41,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
             jwtToken = authorizationHeader.substring(7);
             try {
-                username = jwtUtils.extractUsername(jwtToken);
+                username = jwtUtils.extractClaims(jwtToken).getSubject();
             } catch (ExpiredJwtException e) {
                 response.sendError(
                         HttpServletResponse.SC_UNAUTHORIZED,

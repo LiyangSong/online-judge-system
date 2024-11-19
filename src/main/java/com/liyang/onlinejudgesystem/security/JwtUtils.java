@@ -18,17 +18,15 @@ import java.util.Map;
 
 @Component
 public class JwtUtils {
-
-    private final SecretKey key;
-
-    public JwtUtils(@Value("${jwt.secret}") String secretKey) {
-        this.key = Keys.hmacShaKeyFor(secretKey.getBytes(StandardCharsets.UTF_8));
-    }
+    @Value("${jwt.secret}")
+    private String secretKey;
 
     public String generateToken(UserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();
         String userRole = userDetails.getAuthorities().iterator().next().getAuthority();
         claims.put("userRole", userRole);
+
+        SecretKey key = Keys.hmacShaKeyFor(secretKey.getBytes(StandardCharsets.UTF_8));
 
         return Jwts.builder()
                 .setClaims(claims)
@@ -40,19 +38,18 @@ public class JwtUtils {
     }
 
     public Claims extractClaims(String token) {
+        SecretKey key = Keys.hmacShaKeyFor(secretKey.getBytes(StandardCharsets.UTF_8));
+
         return Jwts.parserBuilder()
-                .setSigningKey(key).build()
+                .setSigningKey(key)
+                .build()
                 .parseClaimsJws(token)
                 .getBody();
     }
 
-    public String extractUsername(String token) {
-        return extractClaims(token).getSubject();
-    }
-
     public boolean validateToken(String token, UserDetails userDetails) {
         Claims claims = extractClaims(token);
-        String extractedUsername = extractUsername(token);
+        String extractedUsername = claims.getSubject();
         String username = userDetails.getUsername();
         return username.equals(extractedUsername)
                 && claims.getExpiration().after(new Date()); // Check token's expiration date is after the current date
