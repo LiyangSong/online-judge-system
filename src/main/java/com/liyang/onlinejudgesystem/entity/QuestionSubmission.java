@@ -1,5 +1,6 @@
 package com.liyang.onlinejudgesystem.entity;
 
+import com.liyang.onlinejudgesystem.enums.JudgeStatus;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -25,7 +26,8 @@ public class QuestionSubmission {
     private String judgeInfo;
 
     @Column(nullable = false)
-    private int status = 0;
+    @Enumerated(EnumType.STRING)
+    private JudgeStatus status = JudgeStatus.WAITING;
 
     @Column(nullable = false, updatable = false)
     @Temporal(TemporalType.TIMESTAMP)
