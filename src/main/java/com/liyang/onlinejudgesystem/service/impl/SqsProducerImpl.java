@@ -7,8 +7,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.liyang.onlinejudgesystem.dto.Message;
 import com.liyang.onlinejudgesystem.entity.QuestionSubmission;
 import com.liyang.onlinejudgesystem.service.SqsProducer;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
